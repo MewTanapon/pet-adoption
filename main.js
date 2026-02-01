@@ -15,6 +15,9 @@ async function petAreas() {
     const petsData = await petsPromise.json()
     petsData.forEach(pet => {
         const clone = template.content.cloneNode(true)
+
+        clone.querySelector(".pet-card").dataset.species = pet.species
+        
         clone.querySelector("h3").textContent = pet.name
         clone.querySelector(".pet-description").textContent = pet.description
         clone.querySelector(".pet-age").textContent = createAgeText(pet.birthYear)
@@ -33,7 +36,7 @@ petAreas()
 function createAgeText(birthYear) {
     const currentYear = new Date().getFullYear()
     const age = currentYear - Number(birthYear)
-    console.log(currentYear, Number(birthYear), age)
+    // console.log(currentYear, Number(birthYear), age)
     if (age == 0) {
         return "Less than a year old."
     } else if (age == 1) {
@@ -57,4 +60,14 @@ function handleButtonClick(event) {
     event.target.classList.add("active")
 
     // get filter type from clicked button
+    const currentFilter = event.target.dataset.filter
+    console.log(currentFilter)
+    document.querySelectorAll(".pet-card").forEach(el => {
+        console.log(el, el.dataset, el.dataset.species)
+        if (currentFilter == el.dataset.species || currentFilter == "all") {
+            el.style.display = "grid"
+        } else {
+            el.style.display = "none"
+        }
+    })
 }
